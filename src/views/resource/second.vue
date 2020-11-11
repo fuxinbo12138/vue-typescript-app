@@ -1,20 +1,18 @@
 <template>
-  <el-card>
-    <div slot="header" class="clearfix">
-      <el-button size="mini" @click="$refs.create.add()">添加菜单</el-button>
+  <div>
+    <div class="clearfix" style="margin-bottom: 10px">
+      <el-button size="mini" @click="$refs.create.add()">添加</el-button>
     </div>
     <el-table :data="list" border stripe style="width: 100%">
       <el-table-column align="center" type="index" :index="indexMethod" width="80" label="编号">
       </el-table-column>
-      <el-table-column align="center" prop="name" label="菜单名称"> </el-table-column>
-      <el-table-column align="center" label="菜单级数">
+      <el-table-column align="center" prop="name" label="名称"> </el-table-column>
+      <el-table-column align="center" prop="url" label="创建时间">
         <template slot-scope="scope">
-          <span v-if="scope.row.level === 0">一级</span>
-          <span v-else>二级</span>
+          <span>{{ scope.row.createdTime | timeFilter }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="icon" label="前端图标"> </el-table-column>
-      <el-table-column align="center" prop="orderNum" label="排序"> </el-table-column>
+      <el-table-column align="center" prop="sort" label="排序"> </el-table-column>
       <el-table-column align="center" label="操作" width="500">
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="$refs.create.editor(scope.row)"
@@ -24,17 +22,24 @@
         </template>
       </el-table-column>
     </el-table>
+
     <create ref="create" @ok="getList" />
-  </el-card>
+  </div>
 </template>
 
 <script lang="ts">
 import Vue from "vue";
-import create from "./components/create.vue";
-import { getAll, del } from "@/api/menu";
+import create from "./components/createSecond.vue";
+import { categoryAll, delCategory } from "@/api/resource";
+import moment from "moment";
 
 export default Vue.extend({
-  name: "MenuIndex",
+  name: "ResourceSecond",
+  filters: {
+    timeFilter(value: string) {
+      return moment(value).format("YYYY-MM-DD");
+    }
+  },
   components: {
     create
   },
@@ -48,11 +53,10 @@ export default Vue.extend({
   },
   methods: {
     indexMethod(index: number) {
-      // return (this.page.current - 1) * 10 + index + 1;
       return index + 1;
     },
     async getList() {
-      const { data } = await getAll();
+      const { data } = await categoryAll();
       if (data.code === "000000") {
         this.list = data.data;
       } else {
@@ -66,7 +70,7 @@ export default Vue.extend({
         type: "warning"
       })
         .then(async () => {
-          const { data } = await del(id);
+          const { data } = await delCategory(id);
           if (data.code === "000000") {
             this.$message.success("删除成功");
             this.getList();
@@ -82,4 +86,16 @@ export default Vue.extend({
 });
 </script>
 
-<style lang="less" scoped></style>
+<style lang="less" scoped>
+.out {
+  ::v-deep .el-card__body {
+    padding: 10px;
+  }
+}
+.search {
+  margin-bottom: 10px;
+  ::v-deep .el-card__body {
+    padding: 20px 10px 10px;
+  }
+}
+</style>
