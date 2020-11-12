@@ -25,8 +25,7 @@
     </el-card>
 
     <div class="clearfix" style="margin-bottom: 10px">
-      <el-button size="mini" @click="$refs.create.add()">添加</el-button>
-      <el-button size="mini" @click="$refs.create.add()">资源分类</el-button>
+      <el-button size="mini" @click="$refs.create.add()">添加资源</el-button>
     </div>
     <el-table :data="list" border stripe style="width: 100%">
       <el-table-column align="center" type="index" :index="indexMethod" width="80" label="编号">
@@ -100,6 +99,7 @@ export default Vue.extend({
   methods: {
     handleSizeChange(val: number) {
       this.page.size = val;
+      this.page.current = 1;
       this.getList();
     },
     handleCurrentChange(val: number) {

@@ -105,7 +105,7 @@ export default Vue.extend({
       (this.$refs.ruleForm as Form).validate(async (valid) => {
         if (valid) {
           const { data } = await saveOrUpdate(this.form);
-          if (data.data) {
+          if (data.code === "000000") {
             this.$message.success("保存成功");
             this.dialogFormVisible = false;
             this.$emit("ok");

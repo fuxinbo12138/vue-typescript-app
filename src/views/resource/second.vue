@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="clearfix" style="margin-bottom: 10px">
-      <el-button size="mini" @click="$refs.create.add()">添加</el-button>
+      <el-button size="mini" @click="$refs.create.add()">添加分类</el-button>
     </div>
     <el-table :data="list" border stripe style="width: 100%">
       <el-table-column align="center" type="index" :index="indexMethod" width="80" label="编号">

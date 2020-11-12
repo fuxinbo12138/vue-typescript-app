@@ -6,21 +6,11 @@
     :visible.sync="dialogFormVisible"
   >
     <el-form :rules="rules" ref="ruleForm" :model="form" label-width="80px">
-      <el-form-item label="资源名称" prop="name">
+      <el-form-item label="角色名称" prop="name">
         <el-input v-model="form.name" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="资源路径" prop="url">
-        <el-input v-model="form.url" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="资源分类" prop="categoryId">
-        <el-select v-model="form.categoryId" placeholder="请选择资源分类">
-          <el-option
-            v-for="category in typeList"
-            :key="category.id"
-            :label="category.name"
-            :value="category.id"
-          ></el-option>
-        </el-select>
+      <el-form-item label="资源编码" prop="code">
+        <el-input v-model="form.code" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="描述" prop="description">
         <el-input v-model="form.description" autocomplete="off"></el-input>
@@ -36,7 +26,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { Form } from "element-ui";
-import { saveOrUpdate, categoryAll } from "@/api/resource";
+import { saveOrUpdate } from "@/api/role";
 
 export default Vue.extend({
   name: "ResourceAddOrUpdate",
@@ -44,15 +34,12 @@ export default Vue.extend({
     return {
       form: {
         name: "",
-        url: "",
-        categoryId: -1,
+        code: "",
         description: ""
       },
       rules: {
-        name: [{ required: true, message: "请输入资源名称", trigger: "blur" }],
-        url: [{ required: true, message: "请输入资源路径", trigger: "blur" }],
-        categoryId: [{ required: true, message: "请选择资源分类", trigger: "change" }],
-        description: [{ required: true, message: "请输入资源描述", trigger: "blur" }]
+        name: [{ required: true, message: "请输入角色名称", trigger: "blur" }],
+        code: [{ required: true, message: "请输入角色编码", trigger: "blur" }]
       },
       typeList: [],
       dialogFormVisible: false
@@ -62,12 +49,10 @@ export default Vue.extend({
     add() {
       this.form = {
         name: "",
-        url: "",
-        categoryId: -1,
+        code: "",
         description: ""
       };
       this.dialogFormVisible = true;
-      this.categoryAll();
       this.$nextTick(() => {
         (this.$refs.ruleForm as Form).clearValidate();
       });
@@ -75,16 +60,9 @@ export default Vue.extend({
     editor(row: any) {
       this.form = JSON.parse(JSON.stringify(row));
       this.dialogFormVisible = true;
-      this.categoryAll();
       this.$nextTick(() => {
         (this.$refs.ruleForm as Form).clearValidate();
       });
-    },
-    async categoryAll() {
-      const { data } = await categoryAll();
-      if (data.code === "000000") {
-        this.typeList = data.data;
-      }
     },
     submit() {
       (this.$refs.ruleForm as Form).validate(async (valid) => {

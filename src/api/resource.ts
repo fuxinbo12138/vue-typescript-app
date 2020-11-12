@@ -25,6 +25,13 @@ export const getList = (data: PageInfo) => {
     data
   });
 };
+// 查询所有资源
+export const getAllResources = () => {
+  return request({
+    method: "GET",
+    url: "/boss/resource/getAll"
+  });
+};
 
 // 查询所有资源分类
 export const categoryAll = () => {
@@ -65,5 +72,23 @@ export const delCategory = (id: number) => {
   return request({
     method: "DELETE",
     url: `/boss/resource/category/${id}`
+  });
+};
+
+export const allocateRoleResources = (data: any) => {
+  return request({
+    method: "POST",
+    url: "/boss/resource/allocateRoleResources",
+    data
+  });
+};
+
+export const getRoleResources = (roleId: string | number) => {
+  return request({
+    method: "GET",
+    url: "/boss/resource/getRoleResources",
+    params: {
+      roleId
+    }
   });
 };
