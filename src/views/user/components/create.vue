@@ -45,7 +45,9 @@ export default Vue.extend({
     async getRolesWithUserPermission(id: number) {
       const { data } = await getRolesWithUserPermission(id);
       this.selectList = data.data;
-      this.form.roleList = data.data.filter((item: any) => item.hasPermission);
+      this.form.roleList = data.data
+        .filter((item: any) => item.hasPermission)
+        .map((item: any) => item.id);
     },
     editor(row: any) {
       this.userInfo = JSON.parse(JSON.stringify(row));
