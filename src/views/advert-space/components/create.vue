@@ -2,14 +2,16 @@
   <el-dialog
     :close-on-click-modal="false"
     width="600px"
-    title="用户管理"
+    title="广告位管理"
     :visible.sync="dialogFormVisible"
   >
-    <el-form :rules="rules" ref="ruleForm" :model="form" label-width="80px">
-      <el-select v-model="form.roleList" multiple placeholder="请选择">
-        <el-option v-for="item in selectList" :key="item.id" :label="item.name" :value="item.id">
-        </el-option>
-      </el-select>
+    <el-form :rules="rules" ref="ruleForm" :model="form" label-width="100px">
+      <el-form-item label="spaceKey" prop="spaceKey">
+        <el-input v-model="form.spaceKey" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="广告位名称" prop="name">
+        <el-input v-model="form.name" autocomplete="off"></el-input>
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -21,37 +23,37 @@
 <script lang="ts">
 import Vue from "vue";
 import { Form } from "element-ui";
-import { allocateUserRoles, getRolesWithUserPermission } from "@/api/role";
+import { saveOrUpdate } from "@/api/advert-space";
 
 export default Vue.extend({
   name: "ResourceAddOrUpdate",
   data() {
     return {
       form: {
-        roleList: []
-      },
-      selectList: [],
-      userInfo: {
-        id: null
+        spaceKey: "",
+        name: ""
       },
       rules: {
-        roleList: [{ required: true, message: "请选择角色", trigger: "blur" }]
+        spaceKey: [{ required: true, message: "请输入spaceKey", trigger: "blur" }],
+        name: [{ required: true, message: "请输入广告位名称", trigger: "blur" }]
       },
       typeList: [],
       dialogFormVisible: false
     };
   },
   methods: {
-    async getRolesWithUserPermission(id: number) {
-      const { data } = await getRolesWithUserPermission(id);
-      this.selectList = data.data;
-      this.form.roleList = data.data
-        .filter((item: any) => item.hasPermission)
-        .map((item: any) => item.id);
+    add() {
+      this.form = {
+        spaceKey: "",
+        name: ""
+      };
+      this.dialogFormVisible = true;
+      this.$nextTick(() => {
+        (this.$refs.ruleForm as Form).clearValidate();
+      });
     },
     editor(row: any) {
-      this.userInfo = JSON.parse(JSON.stringify(row));
-      this.getRolesWithUserPermission(row.id);
+      this.form = JSON.parse(JSON.stringify(row));
       this.dialogFormVisible = true;
       this.$nextTick(() => {
         (this.$refs.ruleForm as Form).clearValidate();
@@ -60,17 +62,13 @@ export default Vue.extend({
     submit() {
       (this.$refs.ruleForm as Form).validate(async (valid) => {
         if (valid) {
-          const result = {
-            userId: this.userInfo.id,
-            roleIdList: this.form.roleList
-          };
-          const { data } = await allocateUserRoles(result);
-          if (data.code === "000000") {
+          const { data } = await saveOrUpdate(this.form);
+          if (data.state === 1) {
             this.$message.success("保存成功");
             this.dialogFormVisible = false;
             this.$emit("ok");
           } else {
-            this.$message.error(data.mesg);
+            this.$message.error(data.message);
           }
         } else {
           console.log("error submit!!");

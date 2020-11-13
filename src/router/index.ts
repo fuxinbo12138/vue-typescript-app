@@ -42,14 +42,20 @@ const routes: Array<RouteConfig> = [
         path: "/role/:roleId/alloc-menu",
         name: "alloc-menu",
         component: () => import(/* webpackChunkName: 'alloc-menu' */ "@/views/role/alloc-menu.vue"),
-        props: true // 将路由路径参数映射到组件的 props 数据中
+        props: true, // 将路由路径参数映射到组件的 props 数据中，
+        meta: {
+          breadcrumb: ["首页", "权限管理", "角色管理", "角色分配菜单"]
+        }
       },
       {
         path: "/role/:roleId/alloc-resource",
         name: "alloc-resource",
         component: () =>
           import(/* webpackChunkName: 'alloc-menu' */ "@/views/role/alloc-resource.vue"),
-        props: true // 将路由路径参数映射到组件的 props 数据中
+        props: true, // 将路由路径参数映射到组件的 props 数据中
+        meta: {
+          breadcrumb: ["首页", "权限管理", "角色管理", "角色分配资源"]
+        }
       },
       {
         path: "/menu",
@@ -73,6 +79,34 @@ const routes: Array<RouteConfig> = [
         component: () => import(/* webpackChunkName: 'course' */ "@/views/course/index.vue"),
         meta: {
           breadcrumb: ["首页", "课程管理"]
+        }
+      },
+      {
+        path: "/course/create",
+        name: "course-create",
+        component: () =>
+          import(/* webpackChunkName: 'course-create' */ "@/views/course/create.vue"),
+        meta: {
+          breadcrumb: ["首页", "课程管理", "创建"]
+        }
+      },
+      {
+        path: "/course/:courseId/edit",
+        name: "course-edit",
+        component: () => import(/* webpackChunkName: 'course-edit' */ "@/views/course/edit.vue"),
+        props: true,
+        meta: {
+          breadcrumb: ["首页", "课程管理", "修改"]
+        }
+      },
+      {
+        path: "/course/:courseId/section",
+        name: "course-section",
+        component: () =>
+          import(/* webpackChunkName: 'course-section' */ "@/views/course/section.vue"),
+        props: true,
+        meta: {
+          breadcrumb: ["首页", "课程管理", "课程内容"]
         }
       },
       {
