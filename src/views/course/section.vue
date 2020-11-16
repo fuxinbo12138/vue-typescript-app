@@ -37,7 +37,7 @@
           <!-- lession -->
           <span v-else class="actions">
             <el-button @click="handleShowEditLesson(data, node.parent.data)">编辑</el-button>
-            <el-button type="success">上传视频</el-button>
+            <el-button type="success" @click="goVideo(data, node)">上传视频</el-button>
             <el-select
               class="select-status"
               v-model="data.status"
@@ -170,6 +170,18 @@ export default Vue.extend({
   },
 
   methods: {
+    goVideo(data: any, node: any) {
+      this.$router.push({
+        name: "course-video",
+        params: {
+          courseId: this.courseId as any
+        },
+        query: {
+          sectionId: node.parent.id,
+          lessonId: data.id
+        }
+      });
+    },
     async loadCourse() {
       const { data } = await getCourseById(this.courseId);
       this.course = data.data;

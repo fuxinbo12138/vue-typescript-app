@@ -110,6 +110,16 @@ const routes: Array<RouteConfig> = [
         }
       },
       {
+        path: "/course/:courseId/video",
+        name: "course-video",
+        component: () =>
+          import(/* webpackChunkName: 'course-section' */ "@/views/course/video.vue"),
+        props: true,
+        meta: {
+          breadcrumb: ["首页", "课程管理", "视频上传"]
+        }
+      },
+      {
         path: "/user",
         name: "user",
         component: () => import(/* webpackChunkName: 'user' */ "@/views/user/index.vue"),

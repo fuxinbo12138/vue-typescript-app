@@ -11,3 +11,13 @@ export const saveOrUpdateLesson = (data: any) => {
     data
   });
 };
+
+export const getLessonById = (lessonId: string | number) => {
+  return request({
+    method: "GET",
+    url: "/boss/course/lesson/getById",
+    params: {
+      lessonId
+    }
+  });
+};

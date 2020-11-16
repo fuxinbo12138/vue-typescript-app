@@ -14,7 +14,7 @@
         </el-form-item>
         <el-form-item>
           <el-button :disabled="loading" @click="handleReset">重置</el-button>
-          <el-button type="primary" :disabled="loading" @click="handleFilter">查询</el-button>
+          <el-button type="primary" :disabled="loading" @click="loadCourses">查询</el-button>
         </el-form-item>
       </el-form>
     </el-card>
